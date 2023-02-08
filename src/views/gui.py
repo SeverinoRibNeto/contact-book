@@ -12,9 +12,11 @@ class GUI:
         self.setup_layout()
 
     def create_widget(self):
-        """Create a widgets in tkinter"""
+        """Create a widgets in tkinter to first window"""
         # set a default lang
         self.set_language("English")
+        # set lang list
+        self.langList = ["English", "Português Brasil"]
 
         # Frames
         self.inforFrame = Frame(self.container, borderwidth=1,
@@ -51,8 +53,36 @@ class GUI:
         self.emailEntry = Entry(self.dataFrame)
 
         # OptionMenu
+        # setLanguage command to do
         self.langSelectOpt = OptionMenu(
             self.inforFrame, self.langSelected, *self.langList, command=self.setLanguage)
+
+        """Create widgets in tkinter to second window"""
+        # Variables
+        self.setFilter = StringVar()
+        # frame
+        self.topFrame = Frame(self.container2)
+        self.centerFrame = Frame(self.container2)
+        self.bottomFrame = Frame(self.container2)
+
+        # Labels
+        self.searchLbl = Label(self.topFrame, textvariable=self.searchTxt)
+        self.resultsLbl = Label(self.centerFrame, textvariable=self.resultsTxt)
+        # todo
+        self.filterLbl = Label(self.topFrame, textvariable=self.filterTxt)
+
+        # Filter Radio
+        self.nameRdo = Radiobutton(self.topFrame, textvariable=self.nameTxt)
+        self.lastNameRdo = Radiobutton(
+            self.topFrame, textvariable=self.lastNameTxt)
+        self.birthdayRdo = Radiobutton(
+            self.topFrame, textvariable=self.birthdayTxt)
+
+        # Entry
+        self.searchEntry = Entry(self.centerFrame)
+
+        # TreeView
+        self.resultsTree = TreeView(self.bottomFrame)
 
     def savePerson(self):
         print("Save")
@@ -79,7 +109,8 @@ class GUI:
             self.deleteTxt = StringVar(None, "Delete")
             self.alterTxt = StringVar(None, "Alter")
             self.saveTxt = StringVar(None, "Save")
-        elif(language == "Portugues Brasil"):
+            self.resultsTxt = StringVar(None, "Results")
+        elif(language == "Português Brasil"):
             self.titleTxt = StringVar(None, "Livro de Contatos")
             self.nameTxt = StringVar(None, "Nome")
             self.lastNameTxt = StringVar(None, "Sobrenome")
@@ -91,6 +122,7 @@ class GUI:
             self.deleteTxt = StringVar(None, "Excluir")
             self.alterTxt = StringVar(None, "Alterar")
             self.saveTxt = StringVar(None, "Salvar")
+            self.resultsTxt = StringVar(None, "Resultados")
         else:
             pass
         return self
