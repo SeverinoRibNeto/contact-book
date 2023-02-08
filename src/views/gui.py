@@ -13,45 +13,26 @@ class GUI:
         self.create_widget()
         self.setup_layout()
 
-    def setLanguage(self, language):
-        if(language == "English"):
-            self.titleTxt = StringVar(None, "Contact Book")
-            self.nameTxt = StringVar(None, "Name")
-            self.lastNameTxt = StringVar(None, "Last Name")
-            self.birthdayTxt = StringVar(None, "Birthday")
-            self.phoneNumberTxt = StringVar(None, "Phone Number")
-            self.addressTxt = StringVar(None, "Address")
-            self.emailTxt = StringVar(None, "Email")
-            self.searchTxt = StringVar(None, "Search")
-            self.deleteTxt = StringVar(None, "Delete")
-            self.alterTxt = StringVar(None, "Alter")
-            self.saveTxt = StringVar(None, "Save")
-            self.resultsTxt = StringVar(None, "Results")
-        elif(language == "Português Brasil"):
-            self.titleTxt = StringVar(None, "Livro de Contatos")
-            self.nameTxt = StringVar(None, "Nome")
-            self.lastNameTxt = StringVar(None, "Sobrenome")
-            self.birthdayTxt = StringVar(None, "Data de Aniversário")
-            self.phoneNumberTxt = StringVar(None, "Telefone")
-            self.addressTxt = StringVar(None, "Endereço")
-            self.emailTxt = StringVar(None, "Email")
-            self.searchTxt = StringVar(None, "Buscar")
-            self.deleteTxt = StringVar(None, "Excluir")
-            self.alterTxt = StringVar(None, "Alterar")
-            self.saveTxt = StringVar(None, "Salvar")
-            self.resultsTxt = StringVar(None, "Resultados")
-        else:
-            pass
-        return self
-
     def create_widget(self):
         """Create a widgets in tkinter to first window"""
-        # set a default lang
-        self.setLanguage("English")
         self.langSelected = StringVar(None, "Language")
         # set lang list
         self.langList = ["English", "Português Brasil"]
 
+        self.titleTxt = StringVar(None, "Contact Book")
+        self.nameTxt = StringVar(None, "Name")
+        self.lastNameTxt = StringVar(None, "Last Name")
+        self.birthdayTxt = StringVar(None, "Birthday")
+        self.phoneNumberTxt = StringVar(None, "Phone Number")
+        self.addressTxt = StringVar(None, "Address")
+        self.emailTxt = StringVar(None, "Email")
+        self.searchTxt = StringVar(None, "Search")
+        self.deleteTxt = StringVar(None, "Delete")
+        self.alterTxt = StringVar(None, "Alter")
+        self.saveTxt = StringVar(None, "Save")
+        self.resultsTxt = StringVar(None, "Results")
+        # set a default lang
+        self.setLanguage("English")
         # Frames
         self.inforFrame = Frame(self.container, borderwidth=1,
                                 highlightbackground="black")
@@ -169,6 +150,37 @@ class GUI:
         self.alterBtn.grid(row=7, column=2, padx=10, pady=10)
         self.saveBtn.configure(width=10, height=2)
         self.saveBtn.grid(row=7, column=3, padx=10, pady=10)
+
+    def setLanguage(self, language):
+        if(language == "English"):
+            self.titleTxt.set("Contact Book")
+            self.nameTxt.set("Name")
+            self.lastNameTxt.set("Last Name")
+            self.birthdayTxt.set("Birthday")
+            self.phoneNumberTxt.set("Phone Number")
+            self.addressTxt.set("Address")
+            self.emailTxt.set("Email")
+            self.searchTxt.set("Search")
+            self.deleteTxt.set("Delete")
+            self.alterTxt.set("Alter")
+            self.saveTxt.set("Save")
+            self.resultsTxt.set("Results")
+        elif(language == "Português Brasil"):
+            self.titleTxt.set("Livro de Contatos")
+            self.nameTxt.set("Nome")
+            self.lastNameTxt.set("Sobrenome")
+            self.birthdayTxt.set("Data de Aniversário")
+            self.phoneNumberTxt.set("Telefone")
+            self.addressTxt.set("Endereço")
+            self.emailTxt.set("Email")
+            self.searchTxt.set("Buscar")
+            self.deleteTxt.set("Excluir")
+            self.alterTxt.set("Alterar")
+            self.saveTxt.set("Salvar")
+            self.resultsTxt.set("Resultados")
+        else:
+            pass
+        return self
 
     def savePerson(self):
         print("Save")
