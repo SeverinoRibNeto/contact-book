@@ -1,4 +1,6 @@
-from tkinter import Button, Entry, Frame, Label, OptionMenu, StringVar, Tk
+import tkinter as tk
+from tkinter import (Button, Entry, Frame, Label, OptionMenu, Radiobutton,
+                     StringVar, Tk, ttk)
 
 # Import Radiobutton and TreeView
 
@@ -82,34 +84,6 @@ class GUI:
             self.langSelected,
             *self.langList,
             command=self.setLanguage)
-        """
-        #Create widgets in tkinter to second window
-        # Variables
-        self.setFilter = StringVar()
-        # frame
-        self.topFrame = Frame(self.container2)
-        self.centerFrame = Frame(self.container2)
-        self.bottomFrame = Frame(self.container2)
-
-        # Labels
-        self.searchLbl = Label(self.topFrame, textvariable=self.searchTxt)
-        self.resultsLbl = Label(self.centerFrame, textvariable=self.resultsTxt)
-        # todo
-        self.filterLbl = Label(self.topFrame, textvariable=self.filterTxt)
-
-        # Filter Radio
-        self.nameRdo = Radiobutton(self.topFrame, textvariable=self.nameTxt)
-        self.lastNameRdo = Radiobutton(
-            self.topFrame, textvariable=self.lastNameTxt)
-        self.birthdayRdo = Radiobutton(
-            self.topFrame, textvariable=self.birthdayTxt)
-
-        # Entry
-        self.searchEntry = Entry(self.centerFrame)
-
-        # TreeView
-        self.resultsTree = ttk.Treeview(self.bottomFrame)
-        """
 
     def setup_layout(self):
         """Pack frames"""
@@ -151,7 +125,95 @@ class GUI:
         self.saveBtn.configure(width=10, height=2)
         self.saveBtn.grid(row=7, column=3, padx=10, pady=10)
 
+    def create_second_window(self):
+        self.container2 = tk.Toplevel()
+        self.container2.title("Contact Book - Search")
+        """Create widgets in tkinter to second window"""
+        # Variables
+        self.setFilter = StringVar(None, str(self.nameTxt.get()))
+        self.choise = StringVar()
+        # frame
+        self.topFrame = Frame(self.container2)
+        self.centerFrame = Frame(self.container2)
+        self.bottomFrame = Frame(self.container2)
+
+        # Labels
+        self.searchLbl = Label(self.topFrame, textvariable=self.searchTxt)
+        self.resultsLbl = Label(self.centerFrame, textvariable=self.resultsTxt)
+        # todo
+        self.filterLbl = Label(self.topFrame, textvariable=self.setFilter)
+
+        # Filter Radio
+        self.nameRdo = Radiobutton(
+            self.topFrame,
+            textvariable=self.nameTxt,
+            variable=self.choise,
+            value=str(self.nameTxt.get()),
+            command=self.setFilterName)
+        self.lastNameRdo = Radiobutton(
+            self.topFrame,
+            textvariable=self.lastNameTxt,
+            variable=self.choise,
+            value=str(self.lastNameTxt.get()),
+            command=self.setFilterName)
+        self.birthdayRdo = Radiobutton(
+            self.topFrame,
+            textvariable=self.birthdayTxt,
+            variable=self.choise,
+            value=str(self.birthdayTxt.get()),
+            command=self.setFilterName)
+
+        # Entry
+        self.searchEntry = Entry(self.centerFrame)
+
+        # button
+        self.searchBtnN = Button(
+            self.centerFrame,
+            textvariable=self.searchTxt,
+            command=self.alterPerson)
+
+        # TreeView
+        self.resultsTree = ttk.Treeview(self.bottomFrame)
+
+    def setFilterName(self):
+        radioSelect = str(self.choise.get())
+        print(radioSelect)
+        if(radioSelect == str(self.nameTxt.get())):
+            self.setFilter.set(str(self.nameTxt.get()))
+        elif(radioSelect == str(self.lastNameTxt.get())):
+            self.setFilter.set(str(self.lastNameTxt.get()))
+        elif(radioSelect == str(self.birthdayTxt.get())):
+            self.setFilter.set(str(self.birthdayTxt.get()))
+        else:
+            pass
+
+    def setup_layout_second_window(self):
+        # pack frame
+        self.topFrame.grid(row=0, column=0, padx=10, pady=10)
+        self.centerFrame.grid(row=3, column=0, padx=10, pady=10)
+        self.bottomFrame.grid(row=5, column=0, padx=10, pady=10)
+
+        # pack into top frame
+        self.searchLbl.grid(row=0, column=0, padx=10, pady=10)
+        self.nameRdo.select()
+        self.nameRdo.grid(row=0, column=2, padx=10, pady=10)
+        self.lastNameRdo.grid(row=0, column=3, padx=10, pady=10)
+        self.birthdayRdo.grid(row=0, column=4, padx=10, pady=10)
+
+        # pack center frame
+        self.filterLbl.grid(row=1, column=0, padx=1, pady=1)
+        self.searchEntry.configure(width=40)
+        self.searchEntry.grid(row=3, column=0)
+        self.searchBtnN.grid(row=3, column=4, padx=10, pady=10)
+
+        # pack bottom frame
+        self.resultsLbl.grid(row=4, column=0, columnspan=4, padx=10, pady=10)
+        self.resultsTree.grid(row=5, column=0, rowspan=4,
+                              columnspan=4, padx=10, pady=10)
+
     def setLanguage(self, language):
+        """Define a lang: English is a default. Second lang is
+        Português Brasil"""
         if(language == "English"):
             self.titleTxt.set("Contact Book")
             self.nameTxt.set("Name")
@@ -192,7 +254,8 @@ class GUI:
         print("Alter")
 
     def searchPerson(self):
-        print("Search")
+        self.create_second_window()
+        self.setup_layout_second_window()
 
 
 # test run
