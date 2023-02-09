@@ -1,6 +1,9 @@
+
 import tkinter as tk
 from tkinter import (Button, Entry, Frame, Label, OptionMenu, Radiobutton,
                      StringVar, Tk, ttk)
+
+from pubsub import pub
 
 # Import Radiobutton and TreeView
 
@@ -245,19 +248,22 @@ class GUI:
         return self
 
     def savePerson(self):
-        print("Save")
+        print("View - Save")
+        pub.sendMessage("Save_Button_Pressed")  # Send message
 
     def deletePerson(self):
-        print("Delete")
+        print("View - Delete")
+        pub.sendMessage("Delete_Button_Pressed")  # Send message
 
     def alterPerson(self):
-        print("Alter")
+        print("View - Alter")
+        pub.sendMessage("Alter_Button_Pressed")  # Send message
 
     def searchPerson(self):
         self.create_second_window()
         self.setup_layout_second_window()
 
-
+"""
 # test run
 if __name__ == '__main__':
     mainwin = Tk()
@@ -269,3 +275,4 @@ if __name__ == '__main__':
     gui = GUI(mainwin)
     gui.setup()
     mainwin.mainloop()
+"""
