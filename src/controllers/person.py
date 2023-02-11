@@ -5,7 +5,6 @@ import os
 if (os.path.join(os.getcwd(), 'src') not in sys.path):
     sys.path.append(os.path.join(os.getcwd(), 'src'))
     print("Path Added")
-
 from models.person import Person
 from views.gui import GUI
 
