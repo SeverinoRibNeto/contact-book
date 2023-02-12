@@ -75,10 +75,9 @@ class Database():
         for value in values:
             valuesList += f"'{value}',"
         valuesList = valuesList[:-1] + ")"
-        if(self.tableExists(tableName)):
-            pass
-        else:
+        if(not self.tableExists(tableName)):
             raise ValueError("Table '" + tableName + "' not exists")
+
         code = f"""INSERT INTO {tableName}
                 {columnsTable}
                 VALUES {valuesList};"""
@@ -91,9 +90,7 @@ class Database():
     """Search data with table name and id"""
 
     def findData(self, tableName: str, id: int):
-        if(self.tableExists(tableName)):
-            pass
-        else:
+        if(not self.tableExists(tableName)):
             raise ValueError("Table '" + tableName + "' not exists")
         data = self.cursor.execute(
             f"""
@@ -104,35 +101,71 @@ class Database():
 
     """Execute this function after data inserted to get last id"""
 
-    def lastIdInserted(self) -> int:
-        return self.cursor.lastrowid
+    def lastIdInserted(self, tableName: str) -> int:
+        if(not self.tableExists(tableName)):
+            raise ValueError("Table '" + tableName + "' not exists")
+
+        data = self.cursor.execute(f"""
+                SELECT id
+                FROM {tableName}
+                WHERE   ID = (SELECT MAX(ID)  FROM {tableName});
+                """).fetchone()
+        return int(data[0])
 
     """Execute function to count a registers table """
 
     def countTableReg(self, tableName: str):
+        if(not self.tableExists(tableName)):
+            raise ValueError("Table '" + tableName + "' not exists")
+
         data = self.cursor.execute(f"""
                 SELECT COUNT(*) FROM {tableName}
                 """)
         return data.fetchone()[0]
 
-    def alterData(self, tableName: str, id: int):
-        # TODO
-        return
+    def alterData(self, tableName: str, id: int,
+                  columns: List[str], values: List[str]) -> bool:
+
+        if(not self.tableExists(tableName)):
+            raise ValueError("Table '" + tableName + "' not exists")
+        strCode = ''
+        for cont in range(len(columns)):
+            strCode += f"{columns[cont]} = '{values[cont]}',"
+        strCode = strCode[:-1]
+        self.cursor.execute(f"""
+                UPDATE {tableName}
+                SET {strCode}
+                WHERE id = {id};
+                """)
+        self.conn.commit()
+        return True
 
     def deleteData(self, tableName: str, id: int):
-        # TODO
-        return
+        if(not self.tableExists(tableName)):
+            raise ValueError("Table '" + tableName + "' not exists")
+        self.cursor.execute(f"""
+            DELETE FROM {tableName}
+            WHERE id = {id};
+                """)
+        self.conn.commit()
+        return True
 
 
 # Tests
 if __name__ == "__main__":
     bd = Database()
-    bd.addIntoTable(tableName="contacts",
-                    columnNames=['name', 'lastName', 'email'],
-                    values=['Sergio', 'Felipe', 'teste'])
 
-    print(bd.lastIdInserted())
+    # if(bd.deleteData("contacts", 4)):
+    #    print("Deletado com Sucesso")
 
+    # if(bd.alterData("contacts", 2, ["name", "lastName"], ["Meu", "Amor"])):
+    #    print("Atualizado")
+
+    # print(bd.lastIdInserted("contacts"))
+
+    # bd.addIntoTable(tableName="contacts",
+    #                columnNames=['name', 'lastName', 'email'],
+    #                values=['Sergio', 'Felipe', 'teste'])
     # print(bd.countTableReg("contacts"))
     # print(bd.findData("contacts", 2))
 
