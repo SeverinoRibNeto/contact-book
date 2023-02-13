@@ -110,6 +110,20 @@ class Person:
         self.birthday = data[6]
         return True
 
+    def findByName(self, name):
+        if(not self.tableExists(self.tableName)):
+            raise ValueError("Table '" + self.tableName + "' not exists")
+        data = self.cursor.execute(
+            f"""
+               SELECT * FROM {self.tableName} WHERE name='{name}';
+            """
+        ).fetchall()
+        return data
+
+    def dataToTupleList(self, data):
+        newData = []
+        return newData
+
     def delete(self):
         if(not self.tableExists(self.tableName)):
             raise ValueError("Table '" + self.tableName + "' not exists")
