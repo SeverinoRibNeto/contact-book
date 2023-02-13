@@ -13,6 +13,7 @@ To use this app, please install:
 
 
 Para usar esse aplicativo, será necessario instalar as seguintes bibliotecas:
+    
     Tkinter execute: pip install tkinter
     Pypubsub execute: pip install pypubsub
     sqlite3 execute: pip install sqlite3
