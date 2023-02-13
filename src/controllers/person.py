@@ -1,10 +1,11 @@
+# from tkinter import (Button, Entry, Frame, Label, OptionMenu, Radiobutton,
+#                     StringVar, Tk, ttk)
 from tkinter import Tk
 from pubsub import pub  # Use to comunication
 import sys
 import os
 if (os.path.join(os.getcwd(), 'src') not in sys.path):
     sys.path.append(os.path.join(os.getcwd(), 'src'))
-    print("Path Added")
 from models.person import Person
 from views.gui import GUI
 
@@ -21,15 +22,56 @@ class PersonController:
         pub.subscribe(self.save_person, "Save_Button_Pressed")
         pub.subscribe(self.delete_person, "Delete_Button_Pressed")
         pub.subscribe(self.alter_person, "Alter_Button_Pressed")
+        pub.subscribe(self.get_person, "Search_Button_Pressed")
 
     def save_person(self):
+        self.person = Person(name=str(self.view.nameEntry.get()),
+                             phoneNumber=str(self.view.phoneNumberEntry.get()),
+                             lastName=str(self.view.lastNameEntry.get()),
+                             email=str(self.view.emailEntry.get()),
+                             address=str(self.view.addressEntry.get()),
+                             birthday=str(self.view.birthdayEntry.get()))
+        self.person.save()
         print("Controller - Save")
 
     def delete_person(self):
+        self.person = Person(name=str(self.view.nameEntry.get()),
+                             phoneNumber=str(self.view.phoneNumberEntry.get()),
+                             lastName=str(self.view.lastNameEntry.get()),
+                             email=str(self.view.emailEntry.get()),
+                             address=str(self.view.addressEntry.get()),
+                             birthday=str(self.view.birthdayEntry.get()))
+        self.person.delete()
         print("Controller - Delete")
 
     def alter_person(self):
+        self.person = Person(name=str(self.view.nameEntry.get()),
+                             phoneNumber=str(self.view.phoneNumberEntry.get()),
+                             lastName=str(self.view.lastNameEntry.get()),
+                             email=str(self.view.emailEntry.get()),
+                             address=str(self.view.addressEntry.get()),
+                             birthday=str(self.view.birthdayEntry.get()))
         print("Controller - Alter")
+
+    def get_person(self):
+        self.person.name = str(self.view.searchEntry.get())
+        self.view.resultsTree.configure(
+            columns=self.person.headerColumns, show='headings')
+        self.view.resultsTree.heading('id', text='Id')
+        self.view.resultsTree.heading(
+            'name', text=str(self.view.nameTxt.get()))
+        self.view.resultsTree.heading(
+            'lastName', text=str(self.view.lastNameTxt.get()))
+        self.view.resultsTree.heading(
+            'Email', text=str(self.view.emailTxt.get()))
+        self.view.resultsTree.heading(
+            'phoneNumber', text=str(self.view.phoneNumberTxt.get()))
+        self.view.resultsTree.heading(
+            'Address', text=str(self.view.addressTxt.get()))
+        self.view.resultsTree.heading(
+            'Birthday', text=str(self.view.birthdayTxt.get()))
+
+        print("Controller - Find")
 
 
 # App entry to main method
