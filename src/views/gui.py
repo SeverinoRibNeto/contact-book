@@ -1,7 +1,7 @@
 
 import tkinter as tk
 from tkinter import (Button, Entry, Frame, Label, OptionMenu, Radiobutton,
-                     StringVar, Tk, ttk)
+                     StringVar, ttk)
 
 from pubsub import pub
 
@@ -58,7 +58,7 @@ class GUI:
         self.searchBtn = Button(
             self.btnFrame,
             textvariable=self.searchTxt,
-            command=self.searchPerson)
+            command=self.secondWindow)
         self.deleteBtn = Button(
             self.btnFrame,
             textvariable=self.deleteTxt,
@@ -173,7 +173,7 @@ class GUI:
         self.searchBtnN = Button(
             self.centerFrame,
             textvariable=self.searchTxt,
-            command=self.alterPerson)
+            command=self.searchPerson)
 
         # TreeView
         self.resultsTree = ttk.Treeview(self.bottomFrame)
@@ -260,8 +260,12 @@ class GUI:
         pub.sendMessage("Alter_Button_Pressed")  # Send message
 
     def searchPerson(self):
+        pub.sendMessage("Search_Button_Pressed")  # Send message
+
+    def secondWindow(self):
         self.create_second_window()
         self.setup_layout_second_window()
+
 
 """
 # test run
