@@ -178,6 +178,11 @@ class GUI:
         # TreeView
         self.resultsTree = ttk.Treeview(self.bottomFrame)
 
+        # Scroll
+        self.scrlbar = ttk.Scrollbar(self.bottomFrame,
+                                     orient="horizontal",
+                                     command=self.resultsTree.yview)
+
     def setFilterName(self):
         radioSelect = str(self.choise.get())
         print(radioSelect)
@@ -213,6 +218,8 @@ class GUI:
         self.resultsLbl.grid(row=4, column=0, columnspan=4, padx=10, pady=10)
         self.resultsTree.grid(row=5, column=0, rowspan=4,
                               columnspan=4, padx=10, pady=10)
+        self.resultsTree.configure(xscrollcommand=self.scrlbar.set)
+        self.scrlbar.grid(row=10, column=0, rowspan=4, columnspan=4)
 
     def setLanguage(self, language):
         """Define a lang: English is a default. Second lang is
