@@ -1,6 +1,7 @@
 # from tkinter import (Button, Entry, Frame, Label, OptionMenu, Radiobutton,
 #                     StringVar, Tk, ttk)
 from tkinter import Tk
+import tkinter as tk
 from pubsub import pub  # Use to comunication
 import sys
 import os
@@ -55,23 +56,35 @@ class PersonController:
 
     def get_person(self):
         self.person.name = str(self.view.searchEntry.get())
+        self.configureViewTree()
+        self.addResultsToViewTree(self.person.findByName(
+            str(self.view.searchEntry.get())))
+        print("Controller - Find")
+
+    def addResultsToViewTree(self, data):
+        for contact in data:
+            self.view.resultsTree.insert('', tk.END, values=contact)
+
+    def configureViewTree(self):
+        columns = self.person.headerColumns
+        columns.insert(0, 'id')
         self.view.resultsTree.configure(
-            columns=self.person.headerColumns, show='headings')
-        self.view.resultsTree.heading('id', text='Id')
+            columns=columns, show='headings')
+        self.view.resultsTree.heading(
+            'id', text="Id")
         self.view.resultsTree.heading(
             'name', text=str(self.view.nameTxt.get()))
         self.view.resultsTree.heading(
             'lastName', text=str(self.view.lastNameTxt.get()))
         self.view.resultsTree.heading(
-            'Email', text=str(self.view.emailTxt.get()))
+            'email', text=str(self.view.emailTxt.get()))
         self.view.resultsTree.heading(
             'phoneNumber', text=str(self.view.phoneNumberTxt.get()))
         self.view.resultsTree.heading(
-            'Address', text=str(self.view.addressTxt.get()))
+            'address', text=str(self.view.addressTxt.get()))
         self.view.resultsTree.heading(
-            'Birthday', text=str(self.view.birthdayTxt.get()))
-
-        print("Controller - Find")
+            'birthday', text=str(self.view.birthdayTxt.get()))
+        return
 
 
 # App entry to main method
