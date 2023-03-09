@@ -2,6 +2,7 @@ import sqlite3
 
 
 class Person:
+    # Declarations of variables to class Person
     tableName = "contacts"
     headerColumns = ['name',
                      'lastName',
@@ -10,6 +11,7 @@ class Person:
                      'email',
                      'address']
     id = 0
+    # Method to inicializate
 
     def __init__(self, name: str = None, phoneNumber: str = None,
                  lastName: str = None, birthday=None,
@@ -21,15 +23,18 @@ class Person:
         self.email = email
         self.address = address
         self.database = "contact-book.db"
+        # Create a connection with database and open it
         try:
             self.conn = sqlite3.connect(self.database)
             self.cursor = self.conn.cursor()
         except Exception as exception:
             print(exception)
+    # Return name of Person
 
-    def completeName(self):
-        return f'{self.name} {self.lastName}'
+    def __str__(self):
+        return f'{self.name}'
 
+    # Transform values in list
     def dataToList(self):
         listValues = []
         listValues.append(self.name)
@@ -40,6 +45,7 @@ class Person:
         listValues.append(self.address)
         return listValues
 
+    # Return if table exists into sys. True if exists
     def tableExists(self, tableName: str) -> bool:
         tableList = []
         try:
@@ -57,6 +63,7 @@ class Person:
             print(exception)
         return False
 
+    # Return the last id inserted into table
     def lastIdInserted(self, tableName: str) -> int:
         if(not self.tableExists(tableName)):
             raise ValueError("Table '" + tableName + "' not exists")
@@ -68,6 +75,7 @@ class Person:
                 """).fetchone()
         return int(data[0])
 
+    # method to save person into database
     def save(self) -> bool:
         columnsTable = '('
         valuesList = '('
@@ -79,6 +87,7 @@ class Person:
         for value in self.dataToList():
             valuesList += f"'{value}',"
         valuesList = valuesList[:-1] + ")"
+        # test table exists
         if(not self.tableExists(self.tableName)):
             raise ValueError("Table '" + self.tableName + "' not exists")
 
@@ -92,6 +101,7 @@ class Person:
             print(exception)
         return True
 
+    # Method to find person
     def find(self):
         if(not self.tableExists(self.tableName)):
             raise ValueError("Table '" + self.tableName + "' not exists")
@@ -110,6 +120,7 @@ class Person:
         self.birthday = data[6]
         return True
 
+    # method to find by name. Return all persons same name
     def findByName(self, name):
         if(not self.tableExists(self.tableName)):
             raise ValueError("Table '" + self.tableName + "' not exists")
@@ -124,6 +135,7 @@ class Person:
         newData = []
         return newData
 
+    # Delete a person into database
     def delete(self):
         if(not self.tableExists(self.tableName)):
             raise ValueError("Table '" + self.tableName + "' not exists")
@@ -134,6 +146,7 @@ class Person:
         self.conn.commit()
         return True
 
+    # alter person into database
     def alter(self):
         values = self.dataToList()
         if(not self.tableExists(self.tableName)):
