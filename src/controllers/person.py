@@ -1,6 +1,6 @@
 # from tkinter import (Button, Entry, Frame, Label, OptionMenu, Radiobutton,
 #                     StringVar, Tk, ttk)
-from tkinter import Tk
+from tkinter import Tk, messagebox
 import tkinter as tk
 from pubsub import pub  # Use to comunication
 import sys
@@ -25,6 +25,15 @@ class PersonController:
         pub.subscribe(self.alter_person, "Alter_Button_Pressed")
         pub.subscribe(self.get_person, "Search_Button_Pressed")
 
+    def delete_entry_data(self):
+        self.view.nameEntry.delete(0, 'end')
+        self.view.phoneNumberEntry.delete(0, "end")
+        self.view.lastNameEntry.delete(0, "end")
+        self.view.emailEntry.delete(0, "end")
+        self.view.birthdayEntry.delete(0, "end")
+        self.view.addressEntry.delete(0, "end")
+
+    # Save person
     def save_person(self):
         self.person = Person(name=str(self.view.nameEntry.get()),
                              phoneNumber=str(self.view.phoneNumberEntry.get()),
@@ -32,7 +41,12 @@ class PersonController:
                              email=str(self.view.emailEntry.get()),
                              address=str(self.view.addressEntry.get()),
                              birthday=str(self.view.birthdayEntry.get()))
-        self.person.save()
+        try:
+            self.person.save()
+            messagebox.showinfo(title="Saved", message="Saved successfully")
+            self.delete_entry_data()
+        except Exception as e:
+            print(e)
         print("Controller - Save")
 
     def delete_person(self):
@@ -72,18 +86,25 @@ class PersonController:
             columns=columns, show='headings')
         self.view.resultsTree.heading(
             'id', text="Id")
+        self.view.resultsTree.column('id', minwidth=0, width=50)
         self.view.resultsTree.heading(
             'name', text=str(self.view.nameTxt.get()))
+        self.view.resultsTree.column('name', minwidth=0, width=250)
         self.view.resultsTree.heading(
             'lastName', text=str(self.view.lastNameTxt.get()))
+        self.view.resultsTree.column('lastName', minwidth=0, width=250)
         self.view.resultsTree.heading(
             'email', text=str(self.view.emailTxt.get()))
+        self.view.resultsTree.column('email', minwidth=0, width=250)
         self.view.resultsTree.heading(
             'phoneNumber', text=str(self.view.phoneNumberTxt.get()))
+        self.view.resultsTree.column('phoneNumber', minwidth=0, width=100)
         self.view.resultsTree.heading(
             'address', text=str(self.view.addressTxt.get()))
+        self.view.resultsTree.column('address', minwidth=0, width=250)
         self.view.resultsTree.heading(
             'birthday', text=str(self.view.birthdayTxt.get()))
+        self.view.resultsTree.column('birthday', minwidth=0, width=100)
         return
 
 
