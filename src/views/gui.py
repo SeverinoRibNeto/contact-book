@@ -180,7 +180,7 @@ class GUI:
 
         # Scroll
         self.scrlbar = ttk.Scrollbar(self.bottomFrame,
-                                     orient="horizontal",
+                                     orient=tk.HORIZONTAL,
                                      command=self.resultsTree.yview)
 
     def setFilterName(self):
