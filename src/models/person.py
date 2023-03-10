@@ -156,10 +156,8 @@ class Person:
         strCode = strCode[:-1]
         strCode = strCode[:-1]
         code = f"""
-                UPDATE '{self.tableName}'
-                SET {strCode}
-                WHERE id = '{self.id}';
-                """
+            UPDATE '{self.tableName}' SET {strCode} WHERE id = '{self.id}';
+            """
         self.cursor.execute(code)
         self.conn.commit()
         return True
@@ -167,7 +165,7 @@ class Person:
 
 """
 if __name__ == "__main__":
-    pessoa = Person(name="Severino", birthday="4654654")
+    pessoa = Person(name="Severino", birthday="15151515")
     pessoa.id = 15
     pessoa.alter()
 """
