@@ -139,8 +139,8 @@ class Person:
         if (not self.tableExists(self.tableName)):
             raise ValueError("Table '" + self.tableName + "' not exists")
         self.cursor.execute(f"""
-            DELETE FROM {self.tableName}
-            WHERE id = {self.id};
+            DELETE FROM '{self.tableName}'
+            WHERE id = '{self.id}';
                 """)
         self.conn.commit()
         return True
