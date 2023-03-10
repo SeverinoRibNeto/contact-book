@@ -20,10 +20,18 @@ class PersonController:
         self.view = GUI(main_window)  # point to GUI interface
         self.view.setup()  # Configurate a view to show window
 
+        self.find_insert()
+
         pub.subscribe(self.save_person, "Save_Button_Pressed")
         pub.subscribe(self.delete_person, "Delete_Button_Pressed")
         pub.subscribe(self.alter_person, "Alter_Button_Pressed")
         pub.subscribe(self.get_person, "Search_Button_Pressed")
+
+    def find_insert(self):
+        id = self.person.lastIdInserted()  # Find Last data inserted
+        self.person.id = id
+        self.person.find()  # Find this data person
+        self.insert_data_entries()  # Write data from Person into entries
 
     def delete_entry_data(self):
         self.view.nameEntry.delete(0, 'end')
@@ -32,6 +40,22 @@ class PersonController:
         self.view.emailEntry.delete(0, "end")
         self.view.birthdayEntry.delete(0, "end")
         self.view.addressEntry.delete(0, "end")
+
+    def disabled_entry(self):
+        self.view.nameEntry.config(state='disabled')
+        self.view.phoneNumberEntry.config(state='disabled')
+        self.view.lastNameEntry.config(state='disabled')
+        self.view.emailEntry.config(state='disabled')
+        self.view.birthdayEntry.config(state='disabled')
+        self.view.addressEntry.config(state='disabled')
+
+    def insert_data_entries(self):
+        self.view.nameEntry.insert(0, str(self.person.name))
+        self.view.phoneNumberEntry.insert(0, str(self.person.phoneNumber))
+        self.view.lastNameEntry.insert(0, str(self.person.lastName))
+        self.view.emailEntry.insert(0, str(self.person.email))
+        self.view.birthdayEntry.insert(0, str(self.person.birthday))
+        self.view.addressEntry.insert(0, str(self.person.address))
 
     # Save person
     def save_person(self):
@@ -44,19 +68,19 @@ class PersonController:
         try:
             self.person.save()
             messagebox.showinfo(title="Saved", message="Saved successfully")
-            self.delete_entry_data()
+            self.disabled_entry()
         except Exception as e:
             print(e)
         print("Controller - Save")
 
     def delete_person(self):
-        self.person = Person(name=str(self.view.nameEntry.get()),
-                             phoneNumber=str(self.view.phoneNumberEntry.get()),
-                             lastName=str(self.view.lastNameEntry.get()),
-                             email=str(self.view.emailEntry.get()),
-                             address=str(self.view.addressEntry.get()),
-                             birthday=str(self.view.birthdayEntry.get()))
-        self.person.delete()
+        try:
+            self.person.delete()
+        except Exception as e:
+            messagebox.showerror(title="Error", message=e)
+        self.delete_entry_data()
+        self.find_insert()
+        self.disabled_entry()
         print("Controller - Delete")
 
     def alter_person(self):
