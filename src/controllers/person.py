@@ -12,6 +12,9 @@ from views.gui import GUI
 
 
 class PersonController:
+    """If alter 0, save; If alter 1, update table
+    """
+    alter = 0
 
     def __init__(self, main_window):  # main_window is tkinter main window
         # variables
@@ -19,9 +22,8 @@ class PersonController:
         self.person = Person()  # point to Person Object
         self.view = GUI(main_window)  # point to GUI interface
         self.view.setup()  # Configurate a view to show window
-
         self.find_insert()
-
+        self.disabled_entry()
         pub.subscribe(self.save_person, "Save_Button_Pressed")
         pub.subscribe(self.delete_person, "Delete_Button_Pressed")
         pub.subscribe(self.alter_person, "Alter_Button_Pressed")
@@ -41,6 +43,9 @@ class PersonController:
         self.view.birthdayEntry.delete(0, "end")
         self.view.addressEntry.delete(0, "end")
 
+    """Disable all entries
+    """
+
     def disabled_entry(self):
         self.view.nameEntry.config(state='disabled')
         self.view.phoneNumberEntry.config(state='disabled')
@@ -48,6 +53,17 @@ class PersonController:
         self.view.emailEntry.config(state='disabled')
         self.view.birthdayEntry.config(state='disabled')
         self.view.addressEntry.config(state='disabled')
+
+        """Enable all entries
+        """
+
+    def enable_entry(self):
+        self.view.nameEntry.config(state='normal')
+        self.view.phoneNumberEntry.config(state='normal')
+        self.view.lastNameEntry.config(state='normal')
+        self.view.emailEntry.config(state='normal')
+        self.view.birthdayEntry.config(state='normal')
+        self.view.addressEntry.config(state='normal')
 
     def insert_data_entries(self):
         self.view.nameEntry.insert(0, str(self.person.name))
@@ -59,18 +75,32 @@ class PersonController:
 
     # Save person
     def save_person(self):
-        self.person = Person(name=str(self.view.nameEntry.get()),
-                             phoneNumber=str(self.view.phoneNumberEntry.get()),
-                             lastName=str(self.view.lastNameEntry.get()),
-                             email=str(self.view.emailEntry.get()),
-                             address=str(self.view.addressEntry.get()),
-                             birthday=str(self.view.birthdayEntry.get()))
-        try:
-            self.person.save()
-            messagebox.showinfo(title="Saved", message="Saved successfully")
-            self.disabled_entry()
-        except Exception as e:
-            print(e)
+        if (self.alter == 0):
+            self.person = Person(name=str(self.view.nameEntry.get()),
+                                 phoneNumber=str(
+                                     self.view.phoneNumberEntry.get()),
+                                 lastName=str(self.view.lastNameEntry.get()),
+                                 email=str(self.view.emailEntry.get()),
+                                 address=str(self.view.addressEntry.get()),
+                                 birthday=str(self.view.birthdayEntry.get()))
+            try:
+                self.person.save()
+                messagebox.showinfo(
+                    title="Saved", message="Saved successfully")
+                self.disabled_entry()
+            except Exception as e:
+                print(e)
+        else:
+            self.person.name = str(self.view.nameEntry.get())
+            self.person.phoneNumber = str(self.view.phoneNumberEntry.get())
+            self.person.lastName = str(self.view.lastNameEntry.get())
+            self.person.email = str(self.view.emailEntry.get())
+            self.person.address = str(self.view.addressEntry.get())
+            self.person.birthday = str(self.view.birthdayEntry.get())
+            self.person.alter()
+            self.delete_entry_data()
+            self.insert_data_entries()
+            self.alter = 0  # Alter data variable to 0, to save in next time
         print("Controller - Save")
 
     def delete_person(self):
@@ -84,12 +114,8 @@ class PersonController:
         print("Controller - Delete")
 
     def alter_person(self):
-        self.person = Person(name=str(self.view.nameEntry.get()),
-                             phoneNumber=str(self.view.phoneNumberEntry.get()),
-                             lastName=str(self.view.lastNameEntry.get()),
-                             email=str(self.view.emailEntry.get()),
-                             address=str(self.view.addressEntry.get()),
-                             birthday=str(self.view.birthdayEntry.get()))
+        self.enable_entry()
+        self.alter = 1  # Set a variable to update the person in save
         print("Controller - Alter")
 
     def get_person(self):
