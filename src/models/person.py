@@ -13,9 +13,8 @@ class Person:
     id = 0
     # Method to inicializate
 
-    def __init__(self, name: str = None, phoneNumber: str = None,
-                 lastName: str = None, birthday=None,
-                 email: str = None, address: str = None):
+    def __init__(self, name=None, phoneNumber=None, lastName=None,
+                 birthday=None, email=None, address=None):
         self.name = name
         self.lastName = lastName
         self.birthday = birthday
@@ -64,14 +63,14 @@ class Person:
         return False
 
     # Return the last id inserted into table
-    def lastIdInserted(self, tableName: str) -> int:
-        if(not self.tableExists(tableName)):
-            raise ValueError("Table '" + tableName + "' not exists")
+    def lastIdInserted(self):
+        if (not self.tableExists(self.tableName)):
+            raise ValueError("Table '" + self.tableName + "' not exists")
 
         data = self.cursor.execute(f"""
                 SELECT id
-                FROM {tableName}
-                WHERE   ID = (SELECT MAX(ID)  FROM {tableName});
+                FROM {self.tableName}
+                WHERE   ID = (SELECT MAX(ID)  FROM {self.tableName});
                 """).fetchone()
         return int(data[0])
 
@@ -88,7 +87,7 @@ class Person:
             valuesList += f"'{value}',"
         valuesList = valuesList[:-1] + ")"
         # test table exists
-        if(not self.tableExists(self.tableName)):
+        if (not self.tableExists(self.tableName)):
             raise ValueError("Table '" + self.tableName + "' not exists")
 
         code = f"""INSERT INTO {self.tableName}
@@ -103,11 +102,11 @@ class Person:
 
     # Method to find person
     def find(self):
-        if(not self.tableExists(self.tableName)):
+        if (not self.tableExists(self.tableName)):
             raise ValueError("Table '" + self.tableName + "' not exists")
         data = self.cursor.execute(
             f"""
-               SELECT * FROM {self.tableName} WHERE id={id};
+               SELECT * FROM '{self.tableName}' WHERE id={self.id};
             """
         )
         data = data.fetchone()
@@ -122,7 +121,7 @@ class Person:
 
     # method to find by name. Return all persons same name
     def findByName(self, name):
-        if(not self.tableExists(self.tableName)):
+        if (not self.tableExists(self.tableName)):
             raise ValueError("Table '" + self.tableName + "' not exists")
         data = self.cursor.execute(
             f"""
@@ -137,7 +136,7 @@ class Person:
 
     # Delete a person into database
     def delete(self):
-        if(not self.tableExists(self.tableName)):
+        if (not self.tableExists(self.tableName)):
             raise ValueError("Table '" + self.tableName + "' not exists")
         self.cursor.execute(f"""
             DELETE FROM {self.tableName}
@@ -149,7 +148,7 @@ class Person:
     # alter person into database
     def alter(self):
         values = self.dataToList()
-        if(not self.tableExists(self.tableName)):
+        if (not self.tableExists(self.tableName)):
             raise ValueError("Table '" + self.tableName + "' not exists")
         strCode = ''
         for cont in range(len(self.headerColumns)):
