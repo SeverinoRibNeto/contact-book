@@ -69,7 +69,7 @@ class Person:
 
         data = self.cursor.execute(f"""
                 SELECT id
-                FROM {self.tableName}
+                FROM '{self.tableName}'
                 WHERE   ID = (SELECT MAX(ID)  FROM {self.tableName});
                 """).fetchone()
         return int(data[0])
@@ -90,7 +90,7 @@ class Person:
         if (not self.tableExists(self.tableName)):
             raise ValueError("Table '" + self.tableName + "' not exists")
 
-        code = f"""INSERT INTO {self.tableName}
+        code = f"""INSERT INTO '{self.tableName}'
                 {columnsTable}
                 VALUES {valuesList};"""
         try:
@@ -125,7 +125,7 @@ class Person:
             raise ValueError("Table '" + self.tableName + "' not exists")
         data = self.cursor.execute(
             f"""
-               SELECT * FROM {self.tableName} WHERE name='{name}';
+               SELECT * FROM '{self.tableName}' WHERE name='{name}';
             """
         ).fetchall()
         return data
@@ -152,20 +152,22 @@ class Person:
             raise ValueError("Table '" + self.tableName + "' not exists")
         strCode = ''
         for cont in range(len(self.headerColumns)):
-            strCode += f"{self.headerColumns[cont]} = '{values[cont]}',"
+            strCode += f"{self.headerColumns[cont]} = '{values[cont]}', "
         strCode = strCode[:-1]
-        self.cursor.execute(f"""
-                UPDATE {self.tableName}
+        strCode = strCode[:-1]
+        code = f"""
+                UPDATE '{self.tableName}'
                 SET {strCode}
-                WHERE id = {self.id};
-                """)
+                WHERE id = '{self.id}';
+                """
+        self.cursor.execute(code)
         self.conn.commit()
         return True
 
 
 """
 if __name__ == "__main__":
-    pessoa = Person("Cida", "4654654")
-    pessoa.id = 2
-    pessoa.find()
+    pessoa = Person(name="Severino", birthday="4654654")
+    pessoa.id = 15
+    pessoa.alter()
 """
