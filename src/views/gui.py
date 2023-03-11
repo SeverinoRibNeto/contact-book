@@ -183,17 +183,18 @@ class GUI:
                                      orient=tk.HORIZONTAL,
                                      command=self.resultsTree.yview)
 
+    # Set a variable filter to find data
     def setFilterName(self):
         radioSelect = str(self.choise.get())
-        print(radioSelect)
-        if(radioSelect == str(self.nameTxt.get())):
+        if (radioSelect == str(self.nameTxt.get())):
             self.setFilter.set(str(self.nameTxt.get()))
-        elif(radioSelect == str(self.lastNameTxt.get())):
+        elif (radioSelect == str(self.lastNameTxt.get())):
             self.setFilter.set(str(self.lastNameTxt.get()))
-        elif(radioSelect == str(self.birthdayTxt.get())):
+        elif (radioSelect == str(self.birthdayTxt.get())):
             self.setFilter.set(str(self.birthdayTxt.get()))
         else:
             pass
+        pub.sendMessage("Filter_Seted")
 
     def setup_layout_second_window(self):
         # pack frame
@@ -224,7 +225,7 @@ class GUI:
     def setLanguage(self, language):
         """Define a lang: English is a default. Second lang is
         Português Brasil"""
-        if(language == "English"):
+        if (language == "English"):
             self.titleTxt.set("Contact Book")
             self.nameTxt.set("Name")
             self.lastNameTxt.set("Last Name")
@@ -237,7 +238,7 @@ class GUI:
             self.alterTxt.set("Alter")
             self.saveTxt.set("Save")
             self.resultsTxt.set("Results")
-        elif(language == "Português Brasil"):
+        elif (language == "Português Brasil"):
             self.titleTxt.set("Livro de Contatos")
             self.nameTxt.set("Nome")
             self.lastNameTxt.set("Sobrenome")
@@ -255,15 +256,12 @@ class GUI:
         return self
 
     def savePerson(self):
-        print("View - Save")
         pub.sendMessage("Save_Button_Pressed")  # Send message
 
     def deletePerson(self):
-        print("View - Delete")
         pub.sendMessage("Delete_Button_Pressed")  # Send message
 
     def alterPerson(self):
-        print("View - Alter")
         pub.sendMessage("Alter_Button_Pressed")  # Send message
 
     def searchPerson(self):
@@ -272,6 +270,7 @@ class GUI:
     def secondWindow(self):
         self.create_second_window()
         self.setup_layout_second_window()
+        pub.sendMessage("Second_Windows_Created")  # Send message
 
 
 """
