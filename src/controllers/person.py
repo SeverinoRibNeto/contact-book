@@ -15,6 +15,9 @@ class PersonController:
     """If alter 0, save; If alter 1, update table
     """
     alter = 0
+    # Data header
+    headerColumns = ['name', 'lastName', 'email',
+                     'phoneNumber', 'address', 'birthday']
 
     def __init__(self, main_window):  # main_window is tkinter main window
         # variables
@@ -22,12 +25,12 @@ class PersonController:
         self.person = Person()  # point to Person Object
         self.view = GUI(main_window)  # point to GUI interface
         self.view.setup()  # Configurate a view to show window
-        self.find_insert()
-        self.disabled_entry()
         pub.subscribe(self.save_person, "Save_Button_Pressed")
         pub.subscribe(self.delete_person, "Delete_Button_Pressed")
         pub.subscribe(self.alter_person, "Alter_Button_Pressed")
         pub.subscribe(self.get_person, "Search_Button_Pressed")
+        pub.subscribe(self.configureViewTree, "Second_Windows_Created")
+        pub.subscribe(self.set_filter, "Filter_Seted")
 
     def find_insert(self):
         id = self.person.lastIdInserted()  # Find Last data inserted
@@ -118,43 +121,54 @@ class PersonController:
         self.alter = 1  # Set a variable to update the person in save
         print("Controller - Alter")
 
+    # Set a Filter variable
+    def set_filter(self):
+        self.filter = self.view.setFilter.get()
+
     def get_person(self):
+        self.deleteResultsTreeView()
         self.person.name = str(self.view.searchEntry.get())
-        self.configureViewTree()
         self.addResultsToViewTree(self.person.findByName(
             str(self.view.searchEntry.get())))
         print("Controller - Find")
 
+    # Add results to Tree View
     def addResultsToViewTree(self, data):
         for contact in data:
             self.view.resultsTree.insert('', tk.END, values=contact)
 
+    # Delete elements of Tree View
+    def deleteResultsTreeView(self):
+        for item in self.view.resultsTree.get_children():
+            self.view.resultsTree.delete(item)
+
+    # Configure a Tree View Headings
     def configureViewTree(self):
-        columns = self.person.headerColumns
+        columns = self.headerColumns
         columns.insert(0, 'id')
         self.view.resultsTree.configure(
             columns=columns, show='headings')
         self.view.resultsTree.heading(
             'id', text="Id")
-        self.view.resultsTree.column('id', minwidth=0, width=50)
+        self.view.resultsTree.column('id', minwidth=0, width=30)
         self.view.resultsTree.heading(
             'name', text=str(self.view.nameTxt.get()))
-        self.view.resultsTree.column('name', minwidth=0, width=250)
+        self.view.resultsTree.column('name', minwidth=0, width=150)
         self.view.resultsTree.heading(
             'lastName', text=str(self.view.lastNameTxt.get()))
-        self.view.resultsTree.column('lastName', minwidth=0, width=250)
+        self.view.resultsTree.column('lastName', minwidth=0, width=150)
         self.view.resultsTree.heading(
             'email', text=str(self.view.emailTxt.get()))
-        self.view.resultsTree.column('email', minwidth=0, width=250)
+        self.view.resultsTree.column('email', minwidth=0, width=150)
         self.view.resultsTree.heading(
             'phoneNumber', text=str(self.view.phoneNumberTxt.get()))
-        self.view.resultsTree.column('phoneNumber', minwidth=0, width=100)
+        self.view.resultsTree.column('phoneNumber', minwidth=0, width=90)
         self.view.resultsTree.heading(
             'address', text=str(self.view.addressTxt.get()))
-        self.view.resultsTree.column('address', minwidth=0, width=250)
+        self.view.resultsTree.column('address', minwidth=0, width=180)
         self.view.resultsTree.heading(
             'birthday', text=str(self.view.birthdayTxt.get()))
-        self.view.resultsTree.column('birthday', minwidth=0, width=100)
+        self.view.resultsTree.column('birthday', minwidth=0, width=80)
         return
 
 
