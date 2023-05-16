@@ -1,23 +1,22 @@
 # contact-book
 Contact Book is a project to demonstrate the ability in database persistence.
 
-To use this app, please install:
+To use this app, please install requirements:
 
-    Tkinter Run: pip install tkinter
-    Pypubsub Run: pip install pypubsub
-    sqlite3 Run: pip install sqlite3
+    pip install -r requirements.txt
 
-  To run this app, open person.py inside controller folder and enjoy!
+## Running
+You need to be in the root directory of the project
+
+    python -m src.app
 
 # Versão em Português
 
+Para usar esse aplicativo, será necessario instalar as dependências:
+    
+    pip install -r requirements.txt
 
-Para usar esse aplicativo, será necessario instalar as seguintes bibliotecas:
-    
-    Tkinter execute: pip install tkinter
-    Pypubsub execute: pip install pypubsub
-    sqlite3 execute: pip install sqlite3
-    
-  Para executar esse aplicativo, abra o person.py dentro da pasta controller.
-  Qualquer problema, entre em contato comigo!
-  Obrigado!
+## Iniciar Aplicação
+Você precisa estar no diretório raiz do projeto
+
+    python -m src.app
