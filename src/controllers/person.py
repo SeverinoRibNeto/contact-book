@@ -1,14 +1,8 @@
-# from tkinter import (Button, Entry, Frame, Label, OptionMenu, Radiobutton,
-#                     StringVar, Tk, ttk)
-from tkinter import Tk, messagebox
+from tkinter import messagebox
 import tkinter as tk
 from pubsub import pub  # Use to comunication
-import sys
-import os
-if (os.path.join(os.getcwd(), 'src') not in sys.path):
-    sys.path.append(os.path.join(os.getcwd(), 'src'))
-from models.person import Person
-from views.gui import GUI
+from src.models.person import Person
+from src.views.gui import GUI
 
 
 class PersonController:
@@ -170,16 +164,3 @@ class PersonController:
             'birthday', text=str(self.view.birthdayTxt.get()))
         self.view.resultsTree.column('birthday', minwidth=0, width=80)
         return
-
-
-# App entry to main method
-if __name__ == '__main__':
-    # Create tk
-    mainwin = Tk()
-    width = 650
-    height = 450
-    mainwin.geometry(f'{width}x{height}')
-    mainwin.title('Contact Book')
-
-    app = PersonController(mainwin)
-    mainwin.mainloop()
